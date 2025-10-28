@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Gamepad2, Star, TrendingUp, Sparkles, Filter } from 'lucide-react';
+import { Gamepad2, Star, TrendingUp, Sparkles, Filter, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import AppCard from '@/components/ui/AppCard';
 import Button from '@/components/ui/Button';
+import BannerCarousel from '@/components/BannerCarousel';
 import { App } from '@/types';
 
 // Mock games data
@@ -203,63 +204,84 @@ export default function GamesPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-8"
-      >
-        <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl p-8 text-white mb-8">
-          <Gamepad2 className="w-16 h-16 mx-auto mb-4" />
-          <h1 className="text-4xl font-bold mb-4">عالم الألعاب</h1>
-          <p className="text-xl opacity-90">
-            اكتشف أفضل الألعاب والمغامرات المثيرة
-          </p>
+    <div className="container mx-auto px-4 py-4">
+      {/* Top Tabs */}
+      <div className="flex items-center justify-between mb-6 overflow-x-auto">
+        <div className="flex space-x-6 min-w-max">
+          <button className="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2 whitespace-nowrap">
+            لك
+          </button>
+          <button className="text-gray-600 dark:text-gray-400 font-medium pb-2 whitespace-nowrap hover:text-gray-900 dark:hover:text-gray-200">
+            أفضل المخططات
+          </button>
+          <button className="text-gray-600 dark:text-gray-400 font-medium pb-2 whitespace-nowrap hover:text-gray-900 dark:hover:text-gray-200">
+            مميز
+          </button>
+          <button className="text-gray-600 dark:text-gray-400 font-medium pb-2 whitespace-nowrap hover:text-gray-900 dark:hover:text-gray-200">
+            الفئات
+          </button>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Categories Filter */}
-      <motion.div
+      {/* Premium Games Banner */}
+      <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="mb-8"
+        className="mb-6"
       >
-        <div className="flex flex-wrap gap-3 justify-center">
-          {categories.map((category) => (
-            <Button
-              key={category.id}
-              variant={selectedCategory === category.id ? 'primary' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedCategory(category.id)}
-              className="flex items-center space-x-2"
-            >
-              <category.icon className="w-4 h-4" />
-              <span>{category.name}</span>
-            </Button>
-          ))}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+            الألعاب المميزة
+          </h2>
+          <ChevronRight className="w-5 h-5 text-gray-400" />
         </div>
-      </motion.div>
+        
+        {/* Featured Game Card */}
+        <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg">
+          <BannerCarousel apps={featuredGames.slice(0, 3)} />
+          
+          {/* Game Info Below Banner */}
+          {featuredGames.length > 0 && (
+            <div className="p-4">
+              <AppCard
+                app={featuredGames[0]}
+                variant="horizontal"
+                onDownload={handleDownload}
+                onViewDetails={handleViewDetails}
+              />
+            </div>
+          )}
+        </div>
+      </motion.section>
 
-      {/* Featured Games */}
+      {/* Sponsored Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="mb-12"
+        className="mb-6"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <Star className="w-6 h-6 text-yellow-500 ml-2" />
-            الألعاب المميزة
-          </h2>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">برعاية</span>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              مقترح لك
+            </h2>
+          </div>
+          <button className="p-1">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {featuredGames.slice(0, 4).map((game) => (
+        
+        <div className="space-y-3">
+          {voxinGames.slice(0, 3).map((game) => (
             <AppCard
               key={game.id}
               app={game}
+              variant="horizontal"
               onDownload={handleDownload}
               onViewDetails={handleViewDetails}
             />
@@ -267,52 +289,19 @@ export default function GamesPage() {
         </div>
       </motion.section>
 
-      {/* Voxin Games */}
+      {/* All Games List */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
         className="mb-12"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <Sparkles className="w-6 h-6 text-blue-500 ml-2" />
-            ألعاب Voxin
-          </h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {voxinGames.map((game) => (
-            <AppCard
-              key={game.id}
-              app={game}
-              onDownload={handleDownload}
-              onViewDetails={handleViewDetails}
-            />
-          ))}
-        </div>
-      </motion.section>
-
-      {/* All Games */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="mb-12"
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <TrendingUp className="w-6 h-6 text-green-500 ml-2" />
-            {selectedCategory === 'all' ? 'جميع الألعاب' : `ألعاب ${getCategoryKeyword(selectedCategory)}`}
-          </h2>
-          <span className="text-sm text-gray-500 dark:text-gray-400">
-            {filteredGames.length} لعبة
-          </span>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="space-y-3">
           {filteredGames.map((game) => (
             <AppCard
               key={game.id}
               app={game}
+              variant="horizontal"
               onDownload={handleDownload}
               onViewDetails={handleViewDetails}
             />

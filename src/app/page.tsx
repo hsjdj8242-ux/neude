@@ -6,6 +6,7 @@ import { Star, TrendingUp, Sparkles } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import AppCard from '@/components/ui/AppCard';
 import Button from '@/components/ui/Button';
+import BannerCarousel from '@/components/BannerCarousel';
 import { App } from '@/types';
 
 // Mock data for demonstration
@@ -128,78 +129,62 @@ export default function HomePage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Hero Section */}
+    <div className="container mx-auto px-4 py-4">
+      {/* Top Tabs */}
+      <div className="flex items-center justify-between mb-6 overflow-x-auto">
+        <div className="flex space-x-6 min-w-max">
+          <button className="text-blue-600 font-semibold border-b-2 border-blue-600 pb-2 whitespace-nowrap">
+            لك
+          </button>
+          <button className="text-gray-600 dark:text-gray-400 font-medium pb-2 whitespace-nowrap hover:text-gray-900 dark:hover:text-gray-200">
+            أفضل المخططات
+          </button>
+          <button className="text-gray-600 dark:text-gray-400 font-medium pb-2 whitespace-nowrap hover:text-gray-900 dark:hover:text-gray-200">
+            مميز
+          </button>
+          <button className="text-gray-600 dark:text-gray-400 font-medium pb-2 whitespace-nowrap hover:text-gray-900 dark:hover:text-gray-200">
+            الفئات
+          </button>
+        </div>
+      </div>
+
+      {/* Banner Carousel */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center mb-12"
+        transition={{ delay: 0.05 }}
+        className="mb-8"
       >
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-8 text-white mb-8">
-          <h1 className="text-4xl font-bold mb-4">
-            مرحباً بك في Volin
-          </h1>
-          <p className="text-xl opacity-90 mb-6">
-            اكتشف وحمل أفضل التطبيقات والألعاب
-          </p>
-          {user && (
-            <p className="text-lg">
-              أهلاً وسهلاً {user.displayName}
-              {isGuest && <span className="text-yellow-300"> (ضيف)</span>}
-            </p>
-          )}
-        </div>
+        <BannerCarousel apps={featuredApps.slice(0, 5)} />
       </motion.section>
 
-      {/* Featured Apps */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="mb-12"
-      >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <Star className="w-6 h-6 text-yellow-500 ml-2" />
-            التطبيقات المميزة
-          </h2>
-          <Button variant="outline" size="sm">
-            عرض الكل
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {featuredApps.map((app) => (
-            <AppCard
-              key={app.id}
-              app={app}
-              onDownload={handleDownload}
-              onViewDetails={handleViewDetails}
-            />
-          ))}
-        </div>
-      </motion.section>
-
-      {/* Voxin Apps */}
+      {/* Sponsored Section */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="mb-12"
+        className="mb-6"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <Sparkles className="w-6 h-6 text-blue-500 ml-2" />
-            تطبيقات Voxin
-          </h2>
-          <Button variant="outline" size="sm">
-            عرض الكل
-          </Button>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <span className="text-sm text-gray-500 dark:text-gray-400 ml-2">برعاية</span>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              مقترح لك
+            </h2>
+          </div>
+          <button className="p-1">
+            <svg className="w-5 h-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+            </svg>
+          </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {voxinApps.map((app) => (
+        
+        <div className="space-y-3">
+          {voxinApps.slice(0, 3).map((app) => (
             <AppCard
               key={app.id}
               app={app}
+              variant="horizontal"
               onDownload={handleDownload}
               onViewDetails={handleViewDetails}
             />
@@ -207,27 +192,19 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* Recent Apps */}
+      {/* All Apps List */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
         className="mb-12"
       >
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center">
-            <TrendingUp className="w-6 h-6 text-green-500 ml-2" />
-            التطبيقات الحديثة
-          </h2>
-          <Button variant="outline" size="sm">
-            عرض الكل
-          </Button>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="space-y-3">
           {recentApps.map((app) => (
             <AppCard
               key={app.id}
               app={app}
+              variant="horizontal"
               onDownload={handleDownload}
               onViewDetails={handleViewDetails}
             />

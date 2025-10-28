@@ -5,6 +5,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { Toaster } from "react-hot-toast";
 import Navbar from "@/components/layout/Navbar";
+import BottomNavigation from "@/components/BottomNavigation";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -54,9 +55,10 @@ export default function RootLayout({
       <body className={`${inter.className} antialiased`}>
         <ThemeProvider>
           <AuthProvider>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-20">
               <Navbar />
-              <main>{children}</main>
+              <main className="pb-4">{children}</main>
+              <BottomNavigation />
             </div>
             <Toaster
               position="top-center"
